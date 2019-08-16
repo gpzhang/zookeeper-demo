@@ -39,26 +39,25 @@ public class WatcherImpl implements Watcher {
         //获取事件的类型
         Event.EventType type = event.getType();
 
-        System.out.println("节点路径:" + path);
         if (Event.KeeperState.SyncConnected.equals(state)) {
             if (Event.EventType.None.equals(type)) {
                 //连接建立成功，则释放信号量，让阻塞的程序继续向下执行
-                System.out.println("zk建立连接成功========");
+                System.out.println("监听回调的节点路径:" + path + "，zk建立连接成功");
             } else if (Event.EventType.NodeCreated.equals(type)) {
-                System.out.println("创建节点通知");
+                System.out.println("监听回调的节点路径:" + path + "，创建节点通知");
             } else if (Event.EventType.NodeDataChanged.equals(type)) {
-                System.out.println("修改节点数据通知");
+                System.out.println("监听回调的节点路径:" + path + "，修改节点数据通知");
             } else if (Event.EventType.NodeDeleted.equals(type)) {
-                System.out.println("删除节点通知");
+                System.out.println("监听回调的节点路径:" + path + "，删除节点通知");
             } else if (Event.EventType.NodeChildrenChanged.equals("")) {
-                System.out.println("子节点变动通知");
+                System.out.println("监听回调的节点路径:" + path + "，子节点变动通知");
             }
         } else if (Event.KeeperState.Disconnected.equals(state)) {
-            System.out.println("与ZK服务器断开连接");
+            System.out.println("监听回调的节点路径:" + path + "，与ZK服务器断开连接");
         } else if (Event.KeeperState.AuthFailed.equals(state)) {
-            System.out.println("权限检查失败");
+            System.out.println("监听回调的节点路径:" + path + "，权限检查失败");
         } else if (Event.KeeperState.Expired.equals(state)) {
-            System.out.println("会话失效");
+            System.out.println("监听回调的节点路径:" + path + "，会话失效");
         }
     }
 }

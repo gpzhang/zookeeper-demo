@@ -1,10 +1,11 @@
-import org.apache.zookeeper.*;
+import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooDefs.Ids;
+import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.Stat;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * 原生API操作zk
@@ -27,22 +28,16 @@ public class ZookeeperBaseApi {
      */
     private int sessionTimeout;
 
-    /**
-     * 信号量，阻塞程序执行，用于等待zookeeper连接成功，发送成功信号
-     */
-    private CountDownLatch countDown = new CountDownLatch(1);
-
 
     public ZookeeperBaseApi(String connectString, int sessionTimeout) throws IOException {
         this.connectString = connectString;
         this.sessionTimeout = sessionTimeout;
-        zookeeper = new ZooKeeper(this.connectString, this.sessionTimeout, new MyWatcher());
+        zookeeper = new ZooKeeper(this.connectString, this.sessionTimeout, new WatcherImpl());
     }
 
 
     public ZooKeeper getZkClient() throws InterruptedException {
         //计数器到达0之前，一直阻塞，只有当信号量被释放，才会继续向下执行
-        countDown.await();
         return zookeeper;
     }
 
@@ -158,31 +153,4 @@ public class ZookeeperBaseApi {
         zk.delete(path, -1);
         System.out.println("删除 " + path + " 节点成功");
     }
-
-    /**
-     * 自定义watcher监听
-     */
-    class MyWatcher implements Watcher {
-
-        @Override
-        public void process(WatchedEvent event) {
-            //影响的路径
-            String path = event.getPath();
-            System.out.println("path:" + path);
-            //获取事件的状态
-            Watcher.Event.KeeperState state = event.getState();
-            //获取事件的类型
-            Watcher.Event.EventType type = event.getType();
-
-            if (Watcher.Event.KeeperState.SyncConnected.equals(state)) {
-                if (Watcher.Event.EventType.None.equals(type)) {
-                    //连接建立成功，则释放信号量，让阻塞的程序继续向下执行
-                    countDown.countDown();
-                    System.out.println("zk建立连接成功========");
-                }
-            }
-        }
-
-    }
-
 }

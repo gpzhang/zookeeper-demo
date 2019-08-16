@@ -28,26 +28,32 @@ public class Main {
         ZooKeeper zkClient = base.getZkClient();
         System.out.println("sessionId:" + zkClient.getSessionId() + ",sessionTimeOut:" + zkClient.getSessionTimeout());
 
-        //判断节点是否存在
+        //判断节点是否存在，添加监听
         if (base.exists(rootNode) == null) {
             //创建父节点
-            base.createNode(rootNode, "zk自带的客户端API的学习使用");
+            base.createNode(rootNode, "节点" + rootNode + "数据创建");
         }
         if (base.exists(childrenNode) == null) {
             //创建子节点
-            base.createNode(childrenNode, "zk自带的客户端API的0727学习使用");
+            base.createNode(childrenNode, "节点" + rootNode + "的子节点" + childrenNode + "数据创建");
         }
-        //获取节点的列表
-        base.getChildren(rootNode);
 
-        //获取节点数据
-        base.getData(childrenNode);
-
+        //获取节点数据，添加监听
+        base.getData(rootNode);
         //修改节点信息
-        base.updateNodeData(childrenNode, "zk自带的客户端API的0727学习更新操作");
+        base.updateNodeData(rootNode, "节点" + rootNode + "数据修改");
 
+        //获取子节点数据
+        base.getData(childrenNode);
+        //修改节点信息
+        base.updateNodeData(childrenNode, "节点" + rootNode + "的子节点" + childrenNode + "数据修改");
+
+        //获取节点的子节点列表，添加监听
+        base.getChildren(childrenNode);
         //删除节点
         base.deleteNode(childrenNode);
+
+//        base.deleteNode(rootNode);
 
         //关闭连接
         base.closeClient();
