@@ -51,7 +51,7 @@ public class Main {
         //获取节点的子节点列表，添加监听
         base.getChildren(childrenNode);
         //删除节点
-//        base.deleteNode(childrenNode);
+        base.deleteNode(childrenNode);
 
         //关闭连接
         base.closeClient();
