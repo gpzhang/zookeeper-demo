@@ -37,7 +37,6 @@ public class ZookeeperBaseApi {
 
 
     public ZooKeeper getZkClient() throws InterruptedException {
-        //计数器到达0之前，一直阻塞，只有当信号量被释放，才会继续向下执行
         return zookeeper;
     }
 
@@ -50,7 +49,7 @@ public class ZookeeperBaseApi {
     }
 
     /**
-     * 创建节点
+     * 创建持久节点
      * 当前节点的父节点必须存在，不然会创建异常
      * zk原生的api不支持递归创建
      *
@@ -62,9 +61,30 @@ public class ZookeeperBaseApi {
      */
 
 
-    public String createNode(String path, String data) throws InterruptedException, KeeperException {
+    public String createPersistentNode(String path, String data) throws InterruptedException, KeeperException {
         ZooKeeper zk = this.getZkClient();
         String str = zk.create(path, data.getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+        System.out.println("创建节点的返回值:" + str);
+        return str;
+    }
+
+    /**
+     * 创建临时节点
+     * 当前节点的父节点必须存在，不然会创建异常
+     * zk原生的api不支持递归创建
+     *
+     * @param path 节点path
+     * @param data 节点数据
+     * @return
+     * @throws InterruptedException
+     * @throws KeeperException
+     */
+
+
+    public String createEphemeralNode(String path, String data) throws InterruptedException, KeeperException {
+        ZooKeeper zk = this.getZkClient();
+        String str = zk.create(path, data.getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
+        System.out.println("创建节点的返回值:" + str);
         return str;
     }
 

@@ -11,7 +11,8 @@ import org.apache.zookeeper.Watcher;
  * 即 watcher.
  * <p>
  * Watcher接口：
- * 定义了时间通知的相关逻辑：通知状态KeeperState、
+ * 定义了时间通知的相关逻辑：
+ * 通知状态KeeperState、
  * 事件类型EventType、
  * 回调方法：process（WatchedEvent event）。
  * <p>

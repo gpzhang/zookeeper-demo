@@ -31,11 +31,11 @@ public class Main {
         //判断节点是否存在，添加监听
         if (base.exists(rootNode) == null) {
             //创建父节点
-            base.createNode(rootNode, "节点" + rootNode + "数据创建");
+            base.createPersistentNode(rootNode, "节点" + rootNode + "数据创建");
         }
         if (base.exists(childrenNode) == null) {
             //创建子节点
-            base.createNode(childrenNode, "节点" + rootNode + "的子节点" + childrenNode + "数据创建");
+            base.createEphemeralNode(childrenNode, "节点" + rootNode + "的子节点" + childrenNode + "数据创建");
         }
 
         //获取节点数据，添加监听
@@ -51,9 +51,7 @@ public class Main {
         //获取节点的子节点列表，添加监听
         base.getChildren(childrenNode);
         //删除节点
-        base.deleteNode(childrenNode);
-
-//        base.deleteNode(rootNode);
+//        base.deleteNode(childrenNode);
 
         //关闭连接
         base.closeClient();
